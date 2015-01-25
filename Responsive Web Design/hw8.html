@@ -1,0 +1,167 @@
+<html>
+    <head>
+        <title>Find Your Property Here</title>
+        <meta name="viewport" content = "width = device-width,initial-scale = 1,maximum-scale = 1"/>
+        <link rel = "stylesheet" href ="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
+        <script src = "http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+        
+        <style>
+            .btnSubmit {
+                border: none;
+                border-radius: 2px;
+                background-color: #F0A751;
+                width: 80px;
+                height: 30px;
+                color: white;
+                margin-left: 20px;
+            }
+            
+            .logo {
+                width:110px;
+                height:30px;
+                align: right;
+                margin-right: 20px;
+                float:right;
+            }
+            
+            .hdr {
+                color: #F0A751;
+                margin:10px;
+                height: 25px;
+            }
+            
+            .str {
+                color: #F0A751;
+                margin:10px;
+                height: 25px;
+            }
+            
+            .city {
+                color: #F0A751;
+                margin:10px;
+                height: 25px;
+            }
+            
+            .state {
+                color: #F0A751;
+                margin:10px;
+                height: 25px;
+            }
+            
+            .bckGnd {
+                background-image:url('V0779-d9.jpg'); 
+                background-repeat:no-repeat;
+                background-size:cover;
+                background-position:center;
+            }
+            
+            .read-more-content {
+                display: none;   
+            }
+        </style>
+    </head>
+    
+    <script>
+        $(document).ready(function () {
+            $('#propForm').validate({ // initialize the plugin
+                errorElement:'div',
+                rules: {
+                    streetAddr: {
+                        required: true
+                    },
+                    cityAddr: {
+                        required: true
+                    },
+                    stateName: {
+                        required: true
+                    }
+                },
+                submitHandler: function (form) { // for demo
+                    alert('valid form submitted'); // for demo
+                    $.ajax({url:"demo_test.txt",success:function(result){
+                    return false; // for demo
+                },
+                errorElement:"span",
+                errorClass:"help-block",
+                errorPlacement: function(error, element) {
+                    error.preventDefault();
+                    $('.read-more-content').slideToggle();
+                }                
+            }); 
+        });
+    </script>
+    <body class="bckGnd">
+        <h4 class="hdr">Search Your Property Here</h3>
+        <form class="form-inline" role = "form" id="propForm">
+            <div class="form-group" id="err">    
+                <label for="address" class="str">Street Address*: </label>
+                <input type="text" class="form-control" placeholder="Address" id="streetAddr" name="streetAddr"  autocomplete="on"/>
+                <p class="read-more-content">Should not be empty.</p>
+            </div>
+            <div class="form-group" id="err">
+                <label for="city" class="city">City*: </label>
+                <input type="text" class="form-control" placeholder="City" id="cityAddr" name="cityAddr" autocomplete="on"/>
+            </div>
+            <div class="form-group" id="err">
+                <label for="state" class="state">State*: </label>
+                <select class="form-control" name="stateName" id="stateName"><br/>
+                            <option value=""></option>
+                            <option value="AL">AL</option>
+                            <option value="AK">AK</option>
+                            <option value="AZ">AZ</option>
+                            <option value="AR">AR</option>
+                            <option value="CA">CA</option>
+                            <option value="CO">CO</option>
+                            <option value="CT">CT</option>
+                            <option value="DE">DE</option>
+                            <option value="DC">DC</option>
+                            <option value="FL">FL</option>
+                            <option value="GA">GA</option>
+                            <option value="HI">HI</option>
+                            <option value="IL">IL</option>
+                            <option value="IN">IN</option>
+                            <option value="IA">IA</option>
+                            <option value="KS">KS</option>
+                            <option value="KY">KY</option>
+                            <option value="LA">LA</option>
+                            <option value="ME">ME</option>
+                            <option value="MD">MD</option>
+                            <option value="MA">MA</option>
+                            <option value="MI">MI</option>
+                            <option value="MN">MN</option>
+                            <option value="MS">MS</option>
+                            <option value="MO">MO</option>
+                            <option value="MT">MT</option>
+                            <option value="NE">NE</option>
+                            <option value="NV">NV</option>
+                            <option value="NH">NH</option>
+                            <option value="NJ">NJ</option>
+                            <option value="NM">NM</option>
+                            <option value="NY">NY</option>
+                            <option value="NC">NC</option>
+                            <option value="ND">ND</option>
+                            <option value="OH">OH</option>
+                            <option value="OK">OK</option>
+                            <option value="OR">OR</option>
+                            <option value="PA">PA</option>
+                            <option value="RI">RI</option>
+                            <option value="SC">SC</option>
+                            <option value="SD">SD</option>
+                            <option value="TN">TN</option>
+                            <option value="TX">TX</option>
+                            <option value="UT">UT</option>
+                            <option value="VT">VT</option>
+                            <option value="VA">VA</option>
+                            <option value="WA">WA</option>
+                            <option value="WV">WV</option>
+                            <option value="WI">WI</option>
+                            <option value="WY">WY</option>
+                </select>
+            </div>
+                <input type="submit" class="btnSubmit" value="Search" name="submit"/>
+                <a href="http://www.zillow.com" target="_blank"><img src="http://www.zillow.com/widgets/GetVersionedResource.htm?path=/static/logos/Zillowlogo_150x40_rounded.gif" alt="Zillow Real Estate Search" class="logo"/></a>
+            </form>
+    </body>
+</html>

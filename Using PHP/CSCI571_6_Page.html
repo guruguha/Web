@@ -1,0 +1,148 @@
+<html>
+    <head>
+        <title>Real Estate Search</title>
+        <style>
+            input,select {
+                vertical-align:left;
+            }
+            
+            div {
+                align:center;
+                border:2px solid black;
+                width: 400px;
+                height: 180px;
+                padding: 20px;
+            }
+            
+            .street {
+                width: 200px;
+                height: 25px;
+            }
+            
+            .city {
+                margin-left:66px;
+                margin-top: 3px;
+                width: 200px;
+                height: 25px;
+            }
+            
+            .states {
+                margin-left:62px;
+                margin-top: 3px;
+                width: 60px;
+                height: 25px;
+            } 
+            
+            .btnSubmit {
+                margin-left:112px;            
+                border-radius: 2px;
+                border: 1px solid black;
+                width: 60px;
+                height: 25px;
+                display: inline-block;
+            }
+            
+            .logo {
+                margin-top: 10px;
+                display: inline-block;
+            }
+        </style>
+    </head>
+    <script>
+        function verifyData() {            
+            var streetVal = document.forms["myForm"]["stName"].value;
+            var cityVal = document.forms["myForm"]["cityName"].value; 
+            var stateVal = document.forms["myForm"]["stateName"].value; 
+            
+            if(streetVal == null || streetVal == "") {
+                if(cityVal == null || cityVal == "") {
+                    if(stateVal == null || stateVal == "choose") {
+                            alert("Please enter the Street address, City and State");
+                    } else {
+                        alert("Please enter the Street address and City");
+                    }
+                    
+                } else if(stateVal == null || stateVal == "choose") {
+                    alert("Please enter the Street address and State");
+                } else {
+                    alert("Please enter the Street address.");
+                }
+            } else if(cityVal == null || cityVal == "") {
+                if(stateVal == null || stateVal == "choose") {
+                    alert("Please enter the State and City");
+                }
+                else {
+                    alert("Please enter the City");
+                }
+            }
+            else if(stateVal == null || stateVal == "choose") {
+                alert("Please enter the State");
+            }
+        }
+    </script>
+    <body>
+        <h2 style="text-align:center">Real Estate Search</h2>
+        <div>
+            <form action="" method="POST" name="myForm" onsubmit="verifyData()">
+                Street Address*: <input type="text" class="street" name="stName"/><br/>
+                City*: <input type="text" class="city" name="cityName"/><br/>
+                State*: <select class="states" name="stateName"><br/>
+                            <option value="choose"></option>
+                            <option value="AL">AL</option>
+                            <option value="AK">AK</option>
+                            <option value="AZ">AZ</option>
+                            <option value="AR">AR</option>
+                            <option value="CA">CA</option>
+                            <option value="CO">CO</option>
+                            <option value="CT">CT</option>
+                            <option value="DE">DE</option>
+                            <option value="DC">DC</option>
+                            <option value="FL">FL</option>
+                            <option value="GA">GA</option>
+                            <option value="HI">HI</option>
+                            <option value="IL">IL</option>
+                            <option value="IN">IN</option>
+                            <option value="IA">IA</option>
+                            <option value="KS">KS</option>
+                            <option value="KY">KY</option>
+                            <option value="LA">LA</option>
+                            <option value="ME">ME</option>
+                            <option value="MD">MD</option>
+                            <option value="MA">MA</option>
+                            <option value="MI">MI</option>
+                            <option value="MN">MN</option>
+                            <option value="MS">MS</option>
+                            <option value="MO">MO</option>
+                            <option value="MT">MT</option>
+                            <option value="NE">NE</option>
+                            <option value="NV">NV</option>
+                            <option value="NH">NH</option>
+                            <option value="NJ">NJ</option>
+                            <option value="NM">NM</option>
+                            <option value="NY">NY</option>
+                            <option value="NC">NC</option>
+                            <option value="ND">ND</option>
+                            <option value="OH">OH</option>
+                            <option value="OK">OK</option>
+                            <option value="OR">OR</option>
+                            <option value="PA">PA</option>
+                            <option value="RI">RI</option>
+                            <option value="SC">SC</option>
+                            <option value="SD">SD</option>
+                            <option value="TN">TN</option>
+                            <option value="TX">TX</option>
+                            <option value="UT">UT</option>
+                            <option value="VT">VT</option>
+                            <option value="VA">VA</option>
+                            <option value="WA">WA</option>
+                            <option value="WV">WV</option>
+                            <option value="WI">WI</option>
+                            <option value="WY">WY</option>
+                        </select></br>
+                <input type="submit" class="btnSubmit" value="Search" name="submit"/>
+                <img src="http://www.zillow.com/widgets/GetVersionedResource.htm?path=/static/logos/Zillowlogo_150x40_rounded.gif" width="150" height="40" alt="Zillow Real Estate Search" class="logo"/>
+            </form>
+        <p><i>* - Mandatory fields.</i></p>
+        </div>
+    </body>
+</html>
