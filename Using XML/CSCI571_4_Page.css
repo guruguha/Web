@@ -1,0 +1,16 @@
+.urlText {
+    width: 150px;
+    border-radius: 3px;
+    
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 14px;
+    color: #666666;
+}
+
+.submitButton {
+    border-radius: 3px;
+    
+    width: 100px;
+    height: 28px;
+    margin-top: 15px;
+}

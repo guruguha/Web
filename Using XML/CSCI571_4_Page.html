@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Input</title>
+        <style>
+            .urlText {
+                width: 150px;
+                border-radius: 3px;
+
+                font-family: "Arial Black", Gadget, sans-serif;
+                font-size: 14px;
+                color: #666666;
+            }
+
+            .submitButton {
+                border-radius: 3px;
+
+                width: 100px;
+                height: 28px;
+                margin-top: 15px;
+            }
+        </style>
+    </head>
+    <script>
+            
+        function verifyURL(myFormObj) {
+            
+            var url = myFormObj.xmlURL.value;
+            //var re = new RegExp("\*.xml");
+            url = url.trim();    
+            if(url == null || url == "") {
+                alert("Enter a URL");                     //Empty textbox
+                return false;
+            } else if(!(/\.(XML|xml)$/i).test(url)){
+                alert("Check file extension!");         //Invalid file extension
+                return false;
+            } else {
+                onGetURL(url);
+            }
+        }
+            
+        function onGetURL(url) {
+            
+            var xmlDoc;
+            var xmlhttp;
+            var retVal;
+            
+            if (window.XMLHttpRequest) {        // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();   
+            } else {                            // code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");  
+            }
+            
+            try {
+                xmlhttp.open("GET",url,false);
+                xmlhttp.send();
+            } catch(e) {
+                alert("Enter a valid XML URL");
+                return;
+            }
+            
+            xmlDoc = xmlhttp.responseXML;
+            
+            if(xmlDoc == null) {
+                alert("Enter a valid XML URL");
+                return;
+            }
+            
+            if(xmlDoc.documentElement.tagName == 'parsererror') {
+                alert("Invalid XML");                                 //Invalid XML entered.
+                return;
+            }
+            
+            if (window.ActiveXObject) {                               //if IE, simply execute script (due to async prop).   
+                if (xmlDoc.parseError.errorCode != 0) {
+                    var myErr = xmlDoc.parseError;
+                    //generateError(xmlDoc);
+                    hWin = window.open("", "HomeWork4", "height=800,width=600, scrollbars=1, toolbar=yes");
+                    hWin.document.write(html_text);
+                } else {  
+                    generateHTML(xmlDoc);
+                    hWin = window.open("", "HomeWork4", "height=800,width=600, scrollbars=1, toolbar=yes");
+                    hWin.document.write(html_text);   
+                }
+            } else {                                                    //else if FF, execute script once XML object has loaded
+                    if(retVal = generateHTML(xmlDoc)) {             
+                        alert("Invalid XML, no child entries found.");  //Empty tags
+                        return;
+                    } else {
+                        hWin = window.open("", "HomeWork4", "height=800,width=600, scrollbars=1, toolbar=yes");
+                        hWin.document.write(html_text);  
+                    }
+            }
+            hWin.document.close();  
+        }
+            
+        function generateHTML(xmlDoc) {
+            var nodeName;
+            var outVal;
+            
+            ELEMENT_NODE = 1;    // MS parser doesn't define Node.ELEMENT_NODE
+            root = xmlDoc.DocumentElement;
+            html_text = "<!DOCTYPE html><html><head><title>Real Estate Listings</title></head><body>";
+            html_text += "<table border='2'>";
+            html_text += "<h2>Real Estate Listings</h2>";
+            
+            listingsNodes = xmlDoc.getElementsByTagName("Listings");
+            listingsChildNodes = listingsNodes.item(0).childNodes;
+            if(!(listingsChildNodes.length > 1)) {
+                return 1;
+            }
+            
+            html_text += "<tbody>";
+            html_text += "<tr>";
+            for(i = 0; i < listingsChildNodes.length; i++) {
+                if(listingsChildNodes.item(i).nodeType == ELEMENT_NODE) {
+                    header = listingsChildNodes.item(i).nodeName;
+				    
+                    // Get Listing and it's children
+                    if(header == "Listing") {
+                        html_text += "<th colspan = 7>"+header+"</th>";
+                        html_text += "</tr>";
+                        
+                        // Get Location and ListingDetails
+                        listingChildNodes = listingsChildNodes.item(i).childNodes;
+                        if(!(listingChildNodes.length > 1)) {
+                            return 1;
+                        }
+                        
+                        for(j = 0; j < listingChildNodes.length; j++) {
+                            if(listingChildNodes.item(j).nodeType == ELEMENT_NODE) {
+                                header = listingChildNodes.item(j).nodeName;
+                                
+                                // Get details of Location tag
+                                if(header == "Location") {
+                                    html_text += "<tr>";
+                                    html_text += "<th>"+header+"</th>";
+                                    
+                                    locationNodes = listingChildNodes.item(j).childNodes;
+                                    for(k = 0; k < locationNodes.length; k++) {
+                                        if(locationNodes.item(k).nodeType == ELEMENT_NODE) {
+                                            header = locationNodes.item(k).nodeName;
+                                            
+                                            if(header == "StreetAddress") {
+                                                header = "Street";
+                                            }
+
+                                            html_text += "<th>"+header+"</th>";
+                                        }                                        
+                                    }
+                                    html_text += "</tr><tr><td></td>";
+                                    
+                                    //Output values to table
+                                    for(outValItr = 0; outValItr < locationNodes.length; outValItr++) {
+                                        if(locationNodes.item(outValItr).nodeType == ELEMENT_NODE) {
+                                            nodeName = locationNodes.item(outValItr).nodeName;
+                                            try {
+                                                //To check for whitespaces
+                                                outVal = (locationNodes.item(outValItr).firstChild.nodeValue).trim();
+                                                if (outVal == '') {
+                                                    alert("An entry of "+nodeName+" tag has white spaces!\nNA has been added to that field.");
+                                                    outVal = "NA";
+                                                }
+                                            } catch(e) {
+                                                alert("An entry of "+nodeName+" tag is empty!\nNA has been added to that field.");
+                                                outVal = "NA";
+                                            }
+                                            html_text += "<td>"+outVal+"</td>";
+                                        }
+                                    }                    
+                                    html_text += "</tr>";
+                                }
+                            
+                                // Get details of ListingDetails tag
+                                if(header == "ListingDetails") {
+                                    html_text += "<tr>";
+                                    header = "Details"; 
+                                    html_text += "<th>"+header+"</th>";
+                                    
+                                    listDetailsChildNodes = listingChildNodes.item(j).childNodes;
+                                    
+                                    for(k = 0; k < listDetailsChildNodes.length; k++) {
+                                        if(listDetailsChildNodes.item(k).nodeType == ELEMENT_NODE) {
+                                            header = listDetailsChildNodes.item(k).nodeName;
+                                    
+                                            if(header == "ListingUrl") {
+                                                header = "Listing URL";  
+                                                html_text += "<th>"+header+"</th>";
+                                            } else if(header == "Image") {
+                                                header = "Image";   
+                                                html_text += "<th colspan = 3>"+header+"</th>";
+                                            } else {
+                                                html_text += "<th>"+header+"</th>";
+                                            }
+                                        }                                        
+                                    }
+                                    html_text += "</tr><tr><td></td>";
+                                    
+                                    //Output values to table
+                                    for(outValItr = 0; outValItr < listDetailsChildNodes.length; outValItr++) {
+                                        if(listDetailsChildNodes.item(outValItr).nodeType == ELEMENT_NODE) {
+                                            nodeName = listDetailsChildNodes.item(outValItr).nodeName;
+                                            try {
+                                                outVal = listDetailsChildNodes.item(outValItr).firstChild.nodeValue;
+                                            } catch(e) {
+                                                alert("An entry of "+nodeName+" tag is empty!\nNA has been added to that field.");
+                                                outVal = "NA";
+                                            }
+                                            if(nodeName == "ListingUrl") {
+                                                var outValURL = "<a href='"+outVal+"'>Link to Listing</a>";
+                                                html_text += "<td>"+outValURL+"</td>";                                                
+                                            } else if(nodeName == "Image") {
+                                                outVal = listDetailsChildNodes.item(outValItr).firstChild.nodeValue;
+                                                html_text += "<td colspan = 3><img src='"+outVal+"' width='"+250+"' height='"+180+"'></td>";
+                                            } else {
+                                                html_text += "<td>"+outVal+"</td>";
+                                            }
+                                        }
+                                    }                    
+                                    html_text += "</tr>";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            html_text += "</tbody><noscript></bo"+"dy></html>";
+		}
+    </script>
+    <body>
+        <div align="center" style="margin:100px">
+            <h3>Enter URL for Real Estate Catalog XML file</h3>
+            <form name="inputForm" method="POST">
+                <input type="text" class="urlText" name="xmlURL"/>
+                <br/>
+                <input type="button" class="submitButton" value="Submit Query" onClick="verifyURL(this.form)"/>
+            </form>
+        </div>
+    <noscript></body>
+</html>
